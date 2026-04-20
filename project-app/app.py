@@ -1,20 +1,22 @@
 import streamlit as st
-from ultralytics import YOLO
+import cv2
 import numpy as np
+from ultralytics import YOLO
 from PIL import Image
 
-st.title("VisionX AI - Object Detection")
+st.title("YOLOv8 Object Detection Web App")
 
-# Load YOLOv8 medium model
+# Load model
 model = YOLO("yolov8m.pt")
 
-# Camera input (works in browser)
-img_file = st.camera_input("Take a picture")
+# Upload image
+uploaded_file = st.file_uploader("Upload an image", type=["jpg", "png", "jpeg"])
 
-if img_file:
-    image = Image.open(img_file)
+if uploaded_file:
+    image = Image.open(uploaded_file)
     img = np.array(image)
 
+    # YOLO detection
     results = model(img)
     annotated = results[0].plot()
 
